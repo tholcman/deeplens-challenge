@@ -1,16 +1,17 @@
 import numpy
 import math
 
-default_action = lambda data: print(data)
+def default_action(xmin, ymin, xmax, ymax):
+    print(xmin, ymin, xmax, ymax)
 
 class NaiveRecognition():
-    def __init__(self, action = default_action, size = 5,):
+    def __init__(self, action = default_action, size = 5):
         self._action = action
         self._size = size
         self._buffer = []
         self._diff_buffer = []
         self._coeficient = 0.2
-        self._top_idx = math.floor(self._size / 2)
+        self._top_idx = int(math.floor(self._size / 2))
 
     def add(self, xmin, ymin, xmax, ymax):
         # test position is float
@@ -22,7 +23,7 @@ class NaiveRecognition():
             return False 
         self._write(diff, position)
         if self._shouldFire():
-            self._action(position)
+            self._action(xmin, ymin, xmax, ymax)
 
     def _write(self, diff, position): 
         self._buffer.insert(0, position)
@@ -50,6 +51,8 @@ class NaiveRecognition():
             return False
         for pos in self._buffer:
             pos_diff += pos - min_pos
-        if pos_diff < (0.004 * self._size):
+        if pos_diff < (0.5 * self._size):
+            # print('not ', pos_diff)
             return False
+        # print('enough ', pos_diff)
         return True

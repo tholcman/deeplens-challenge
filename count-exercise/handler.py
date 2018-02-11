@@ -28,7 +28,16 @@ client = greengrasssdk.client('iot-data')
 # The information exchanged between IoT and clould has
 # a topic and a message body.
 # This is the topic that this code uses to send messages to cloud
-iotTopic = '$aws/things/{}/infer'.format(os.environ['AWS_IOT_THING_NAME'])
+my_name = os.environ['AWS_IOT_THING_NAME']
+iotTopic = '$aws/things/{}/infer'.format(my_name)
+client.publish(
+    topic=iotTopic, 
+    payload = '{"type":"{type}","payload":{"time":"{time}","msg":"Camera {name} id up."}}'.format(
+        type = 'system',
+        time = time.time(),
+        name = my_name
+    )
+)
 
 ret, frame = awscam.getLastFrame()
 ret,jpeg = cv2.imencode('.jpg', frame)
@@ -56,7 +65,23 @@ def add_one(xmin, ymin, xmax, ymax):
     global counter
     counter += 1
 
-recognize = NaiveRecognition(action = add_one, size = 3)
+def send_notification(xmin, ymin, xmax, ymax):
+    global client, iotTopic, my_name
+    client.publish(
+        topic=iotTopic, 
+        payload = '{"type":"{type}","payload":{"camera":"{camera}","time":"{time}","exercise":"{exercise}"}}'.format(
+            camera = my_name,
+            time = time.time(),
+            type = 'exercise',
+            exercise = 'barbell_up'
+        )
+    )
+    
+def merged_handlers(xmin, ymin, xmax, ymax):
+    send_notification(xmin, ymin, xmax, ymax)
+    add_one(xmin, ymin, xmax, ymax)
+
+recognize = NaiveRecognition(action = merged_handlers, size = 3)
 
 def greengrass_infinite_infer_run():
     try:

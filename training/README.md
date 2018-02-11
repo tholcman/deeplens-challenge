@@ -40,7 +40,7 @@ cd incubator-mxnet/example/ssd
 # upload locally generated train.rec and val.rec to data/ folder 
 
 # start training
-nohup python train.py --train-path data/train.rec --val-path data/val.rec --class-names barbell --num-class 1 --network resnet50 --end-epoch 9999  &
+nohup python train.py --train-path data/train.rec --val-path data/val.rec --class-names barbell --num-class 1 --network resnet50 --end-epoch 9999 &
 tail -f nohup.out
 # watch progress and kill process when satisfied with probabilities
 

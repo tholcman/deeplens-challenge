@@ -1,4 +1,3 @@
-/*
 resource "aws_elasticsearch_domain" "count-exercise" {
   domain_name           = "count-exercise"
   elasticsearch_version = "5.5"
@@ -11,31 +10,25 @@ resource "aws_elasticsearch_domain" "count-exercise" {
     "rest.action.multi.allow_explicit_index" = "true"
   }
 
+  vpc_options {
+    subnet_ids         = ["subnet-32ea8d1d"]
+    security_group_ids = ["sg-b9aec5ce"]
+  }
+
   access_policies = <<CONFIG
 {
-    "Version": "2012-10-17",
-    "Statement": [
+    "Version":"2012-10-17",
+    "Statement":[
         {
-            "Action": "es:*",
-            "Principal": "*",
-            "Effect": "Allow",
-            "Condition": {
-                "IpAddress": {"aws:SourceIp": ["66.193.100.22/32"]}
-            }
+            "Action":"es:*",
+            "Effect":"Allow",
+            "Principal":{"AWS":"*"},
+            "Resource":"arn:aws:es:us-east-1:935232462890:domain/count-exercise/*"
         }
     ]
 }
 CONFIG
-
-  snapshot_options {
-    automated_snapshot_start_hour = 23
-  }
-
-  tags {
-    Domain = "TestDomain"
-  }
 }
-*/
 
 resource "aws_security_group" "elasticsearch" {
   name        = "elasticsearch"

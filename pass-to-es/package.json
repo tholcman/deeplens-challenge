@@ -1,0 +1,15 @@
+{
+  "name": "pass-to-es",
+  "version": "1.0.0",
+  "description": "",
+  "main": "handler.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "elasticsearch": "^14.1.0",
+    "get-json": "^1.0.0"
+  }
+}

@@ -11,7 +11,7 @@
 #
 # Happy Coding!
 
-service: count-exercise-leafs
+service: count-exercise-backend
 
 # You can pin your service to only deploy with a specific Serverless version
 # Check out our docs for more details
@@ -19,7 +19,7 @@ service: count-exercise-leafs
 
 provider:
   name: aws
-  runtime: python2.7
+  runtime: nodejs6.10
   region: us-east-1
   profile: personal
 
@@ -63,9 +63,18 @@ package:
     - .serverless
 
 functions:
-  count-exercise:
+  pass-to-es:
     handler: handler.handler
-    role: arn:aws:iam::935232462890:role/AWSDeepLensLambdaRole
+    memorySize: 128
+    events:
+      - iot:
+          sql: "SELECT * FROM '$aws/things/deeplens_c87d5d0b-c7b1-4d20-af10-8b1b1e035f59/infer'"
+    vpc:
+      securityGroupIds:
+        - sg-ababc1dc
+      subnetIds:
+        - subnet-32ea8d1d
+
 
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events

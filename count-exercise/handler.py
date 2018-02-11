@@ -21,6 +21,7 @@ import math
 import numpy
 from threading import Thread
 from recognition import NaiveRecognition
+import uuid
 
 # Creating a greengrass core sdk client
 client = greengrasssdk.client('iot-data')
@@ -32,7 +33,8 @@ my_name = os.environ['AWS_IOT_THING_NAME']
 iotTopic = '$aws/things/{}/infer'.format(my_name)
 client.publish(
     topic=iotTopic, 
-    payload = '{"type":"{type}","payload":{"time":"{time}","msg":"Camera {name} id up."}}'.format(
+    payload = '{{"type":"{type}","payload":{{"id":"{id}","time":"{time}","msg":"Camera {name} id up."}}}}'.format(
+        id = str(uuid.uuid4()),
         type = 'system',
         time = time.time(),
         name = my_name
@@ -69,10 +71,11 @@ def send_notification(xmin, ymin, xmax, ymax):
     global client, iotTopic, my_name
     client.publish(
         topic=iotTopic, 
-        payload = '{"type":"{type}","payload":{"camera":"{camera}","time":"{time}","exercise":"{exercise}"}}'.format(
+        payload = '{{"type":"{event_type}","payload":{{"id":"{id}","camera":"{camera}","time":"{time}","exercise":"{exercise}"}}}}'.format(
+            id = str(uuid.uuid4()),
             camera = my_name,
             time = time.time(),
-            type = 'exercise',
+            event_type = 'exercise',
             exercise = 'barbell_up'
         )
     )

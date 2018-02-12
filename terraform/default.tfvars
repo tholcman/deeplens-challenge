@@ -1,1 +1,5 @@
-vpc_id="vpc-87fefeff"
+vpc_id = "vpc-87fefeff"
+subnet = "subnet-32ea8d1d"
+keyname = "th-xps-13"
+profile = "personal"
+allowed_account_id = "935232462890" 

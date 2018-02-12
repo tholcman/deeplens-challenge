@@ -74,7 +74,8 @@ functions:
         - sg-ababc1dc
       subnetIds:
         - subnet-32ea8d1d
-
+    environment:
+      ES_ENDPOINT: https://vpc-count-exercise-74dnkcubz7lddoh2uhkny362we.us-east-1.es.amazonaws.com/
 
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events

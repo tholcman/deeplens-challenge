@@ -11,7 +11,7 @@ resource "aws_elasticsearch_domain" "count-exercise" {
   }
 
   vpc_options {
-    subnet_ids         = ["subnet-32ea8d1d"]
+    subnet_ids         = ["${var.subnet}"]
     security_group_ids = ["${aws_security_group.elasticsearch.id}"]
   }
 
@@ -86,9 +86,9 @@ resource "aws_security_group_rule" "allow_ssh" {
 resource "aws_instance" "proxy" {
   ami                    = "ami-66506c1c"                             // ubuntu 16.04
   instance_type          = "t2.nano"
-  key_name               = "th-xps-13"
+  key_name               = "${var.keyname}"
   vpc_security_group_ids = ["${aws_security_group.elasticsearch.id}"]
-  subnet_id              = "subnet-32ea8d1d"
+  subnet_id              = "${var.subnet}"
 
   tags {
     Name = "es-proxy"

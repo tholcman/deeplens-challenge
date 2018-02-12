@@ -14,6 +14,6 @@ terraform {
 
 provider "aws" {
   region              = "us-east-1"
-  allowed_account_ids = ["935232462890"]
-  profile             = "personal"
+  allowed_account_ids = ["${var.allowed_account_id}"]
+  profile             = "${var.profile}"
 }

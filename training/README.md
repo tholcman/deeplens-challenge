@@ -2,13 +2,14 @@
 
 Checkouted https://github.com/apache/incubator-mxnet/ and use subfolder `./example/ssd/`
 
-Put files from here to corresponding directories in ssd example
+Put files from this directory to corresponding directories in ssd example
 
-## prepare dataset 
-- files have `md5(original_name).jpg` name
-- images are resized to max 500px
-- annotations created with https://github.com/tzutalin/labelImg
-- validation images has twice checked annotations - to not miss anything
+## Prepare Dataset 
+- Images have `md5(original_name).jpg` name
+- Images are resized to max 500px
+- Annotations created with https://github.com/tzutalin/labelImg
+- Validation images has twice checked annotations - to not miss anything
+- .txt files contain md5 names of images without extension
 
 ```
 ds/
@@ -24,10 +25,10 @@ python3 tools/prepare_dataset.py --dataset th --set train --root ds/ --target ./
 python3 tools/prepare_dataset.py --dataset th --set val --root ds/ --target ./data/val.lst
 ```
 
-## training
-by default it tries to use pretrained model `vgg16_reduced`, I don't know if it is good for `ssd_resnet50` so I have turned it off: `line 222 train/train_net.py`
+## Training
+By default it tries to use pretrained model `vgg16_reduced`, I don't know if it is good for `ssd_resnet50` so I have turned it off: `line 222 train/train_net.py`. Have not found way how to do it with CLI params.
 
-- run on p2.xlarge with Deeplearning AMI
+- run on p2.xlarge with Deeplearning AMI, at least 200GB disk
 - activate `mxnet_p36` and downgrade mxnet to mxnet-cu90==0.11.1b20171009 (because of Intel Deeplearning Deployment Toolkit doesn't support new one)
 - or create custom virtualenv with proper version ^, for custom virtualenv see mxnet getting started installation instruction
 
@@ -35,19 +36,19 @@ by default it tries to use pretrained model `vgg16_reduced`, I don't know if it 
 git clone https://github.com/apache/incubator-mxnet.git
 cd incubator-mxnet/example/ssd
 ```
-- upload locally generated train.rec and val.rec to data/ folder 
+- upload locally generated `train.rec` and `val.rec` to `data/` folder 
 - start training
 ```
 nohup python train.py --train-path data/train.rec --val-path data/val.rec --class-names barbell --num-class 1 --network resnet50 --end-epoch 9999 &
 tail -f nohup.out
 ```
-- watch progress and kill process when satisfied with probabilities
+- watch progress and kill process when satisfied with probabilities (usually less then 1 hour)
 - deploy model
 ```
-python3 deploy.py --prefix model/ssd_resnet50_300 --network resnet50 --num-class 20
+python3 deploy.py --prefix model/ssd_resnet50_300 --network resnet50 --num-class 1
 ```
 
-Optimize model on Deeplens camera
+Optimize model on DeepLens camera
 ```
 python3 /opt/awscam/intel/deeplearning_deploymenttoolkit/deployment_tools/model_optimizer/mxnet_converter/mo_mxnet_converter.py \ 
 --models-dir ./ --output-dir ./ \
@@ -57,10 +58,12 @@ python3 /opt/awscam/intel/deeplearning_deploymenttoolkit/deployment_tools/model_
 --mean-var-r 123 --mean-var-g 117  --mean-var-b 104
 ```
 ## Mean pixels !!!!!!!
-I was stuck for few days when demo.py provide good results but converted model didn't. After building custom demo on video I have found that `mean_pixels` value are not default. Put print to `dataset/iterator.py` and try demo.py to get exact values
+I was stuck for few days when demo.py provide good results, but converted model didn't. After building custom demo on video I have found that `mean_pixels` value are not default. Put print to `dataset/iterator.py` and try demo.py to get exact values
 ```python
         # line 168
         print('Mean_pixels', mean_pixels)
         # !!!! 
 ```
+
+Solves this issue https://forums.aws.amazon.com/thread.jspa?messageID=829765#829765
 

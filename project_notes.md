@@ -22,12 +22,12 @@ Biggest question: Might it get global?
     * probably more reliable
     * would need partners around the globe
     * worse installation and maintenance
-- IP cameras / DeepLenses send to AWS
+- IP cameras / DeepLenses process on AWS
     * probably moste expansive operation
 - thousands $ investments
 
 ## Operations
-- Lifetime of Cameras (2 years, in doubt)
+- Lifetime of Cameras (2 years? in doubt)
 - Disturbances
 - Cloud / Backend costs
 
@@ -37,5 +37,6 @@ Biggest question: Might it get global?
 - Maybe share from hiring remote trainers
 - Fee from Gyms for equipment statistics
 - HUGE ammount of data for training other models
-- ?Connected shop with equipment?
+- Connected shop with equipment or at least affilieate
 - Advertisement
+- Cooperation with manufacturer of fitness machines (other sensor + Raspberry Pi as IoT item)

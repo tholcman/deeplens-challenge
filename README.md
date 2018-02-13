@@ -3,7 +3,7 @@
 Original idea was to have camera which will count exercises on machines for bench press, lat pulldown, chest press etc. in gym. And mobile or web app which will show personal statistics. During development I got stuck many times on training, deployments, model conversions etc. I am not python developer and I didn't have any knowledge about machine learning. At the end I was able to create just simple model which can recognize barbell and from its moves it tries to count exercises. Logs about exercises are sent via IoT to Lambda which saves them to Elasticsearch. Unfortunetely I was not able to create any frontend. Exercises logs might be seen just in Kibana. If you ask I can add your IP address to firewall and send you Kibana endpoint to see results.
 
 ## Model
-I have trained `ssd_resnet50` model on custom dataset (one class) with tools from [Incubator-mxnet SSD example](https://github.com/apache/incubator-mxnet/tree/master/example/ssd). I have some [notes on training and model conversion](training/README.md)
+I have trained `ssd_resnet50` model on custom dataset (one class) with tools from [Incubator-mxnet SSD example](https://github.com/apache/incubator-mxnet/tree/master/example/ssd). I have some [notes on training and model conversion](training/)
 
 .json and .xml files are here in repository or might be downloaded from 
 - https://s3.amazonaws.com/deeplens-th-ex/bells-model5/ssd_resnet50_300-symbol.json
@@ -14,7 +14,7 @@ Corresponding binary files might be downloaded from
 - https://s3.amazonaws.com/deeplens-th-ex/bells-model5/opt/mxnet_deploy_ssd_resnet50_300_FP16_FUSED.bin
 
 ## Rest of project
-As I have mentioned before I have used 2 lambdas, both managed by serverless. `count-exercise` is function to be deployed with Greengrass to DeepLens and `pass-to-es` is lambda triggered by IoT, which will pass data to Elasticsearch.
+As I have mentioned before I have used 2 lambdas, both managed by serverless. `count-exercise` is function to be deployed with Greengrass to DeepLens and `pass-to-es` is lambda triggered by IoT, which will pass data into Elasticsearch.
 
 In Terraform folder there are other AWS resources - Elasticsearch Domain and EC2 Instance as proxy.
 
@@ -94,7 +94,7 @@ You can check [demo video](https://s3.amazonaws.com/deeplens-th-ex/bells-model5/
 # What's next
 I will take few days rest - it was really hard to work on such project with so many fails, expecialy after my normal job on weekends and evenings! But I definetely won't give up on it! I will walk through Python course, Machine Learning course and through mxnet & gluon tutorials. Meantime I will ask some gyms if I can place my camera there and will gather material for datasets. One friend of mine is really interested in project and offered help with dataset preparation.
 
-Plan:
+### Ideas:
 - train better model to recognize at least person (maybe with pose), barbell weights, kettlebell, block-weights used on machines (easier and more general to watch then handles and other moving parts of machines)
 - Exercise Recognition
     * position within camera view => match to exercise
@@ -112,7 +112,7 @@ Plan:
 - Authentication and how to connect person and exercise.
     * Person's face can't be seen during every exercise and it would be expansive (computationally and financially) to recognize with each exercise.
     * Camera directed to entrance which will detect faces and send them to AWS Rekognition
-    * Some simplified model to person recognition. Any suggestions? How does it AWS Rekognition on videos.
+    * Some simplified model to person recognition/classification. Any suggestions? How does it AWS Rekognition on videos.
 - Multiple Cameras cooperation
 
 All these are about machine learning and technical stuff around DeepLens camera. I was thinking a lot about potential project. And I have also [some notes on possible project](project_notes.md). Unfortunately these thoughts was much much faster than actual progress on model and code. :-)

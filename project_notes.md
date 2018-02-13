@@ -14,7 +14,7 @@ Biggest question: Might it get global?
     * Equipment statistics - maintenance, lifetime
 
 ## System Equipment for Gyms
-- Several Deeplenses 
+- Several DeepLenses 
     * ?5-10? per small-mid gym
     * self setup, registration and management via admin interface (with view area to machine/exercise editation)
     * might get global easier than solution below
@@ -22,7 +22,7 @@ Biggest question: Might it get global?
     * probably more reliable
     * would need partners around the globe
     * worse installation and maintenance
-- IP cameras / deeplenses send to AWS
+- IP cameras / DeepLenses send to AWS
     * probably moste expansive operation
 - thousands $ investments
 

@@ -1,4 +1,4 @@
-# Exercise counter with Deeplens
+# Exercise counter with DeepLens
 
 Original idea was to have camera which will count exercises on machines for bench press, lat pulldown, chest press etc. in gym. And mobile or web app which will show personal statistics. During development I got stuck many times on training, deployments, model conversions etc. I am not python developer and I didn't have any knowledge about machine learning. At the end I was able to create just simple model which can recognize barbell and from its moves it tries to count exercises. Logs about exercises are sent via IoT to Lambda which saves them to Elasticsearch. Unfortunetely I was not able to create any frontend. Exercises logs might be seen just in Kibana. If you ask I can add your IP address to firewall and send you Kibana endpoint to see results.
 
@@ -14,7 +14,7 @@ Corresponding binary files might be downloaded from
 - https://s3.amazonaws.com/deeplens-th-ex/bells-model5/opt/mxnet_deploy_ssd_resnet50_300_FP16_FUSED.bin
 
 ## Rest of project
-As I have mentioned before I have used 2 lambdas, both managed by serverless. `count-exercise` is function to be deployed with Greengrass to Deeplens and `pass-to-es` is lambda triggered by IoT, which will pass data to Elasticsearch.
+As I have mentioned before I have used 2 lambdas, both managed by serverless. `count-exercise` is function to be deployed with Greengrass to DeepLens and `pass-to-es` is lambda triggered by IoT, which will pass data to Elasticsearch.
 
 In Terraform folder there are other AWS resources - Elasticsearch Domain and EC2 Instance as proxy.
 
@@ -56,7 +56,7 @@ serverless deploy
 ```
 **these steps might be automatized and connected to terraform*
 
-#### 2. Create Deeplens project
+#### 2. Create DeepLens project
 - create model from `s3://deeplens-th-ex/bells-model5/opt/`
 - create project using model above and function `count-exercise-leafs-dev-count-exercise`
 - deploy to device
@@ -81,12 +81,12 @@ It will produce video resized to 224x224 with, barbell detection and counter.
 
 You can check [demo video](https://s3.amazonaws.com/deeplens-th-ex/bells-model5/output1.avi)
 
-## Project structure
+#### Project structure
 
 ```
 ./
 ├── artifacts # .json
-├── count-exercise # lambda to be deployed to Deeplens
+├── count-exercise # lambda to be deployed to DeepLens
 ├── pass-to-es # lambda to pass data from IoT topic to Elasticsearch, probably should be renamed and used for ES-mobile interface
 ├── terraform # terraform for other resources
 └── training # notes on training and converting model
@@ -115,4 +115,4 @@ Plan:
     * Some simplified model to person recognition. Any suggestions? How does it AWS Rekognition on videos.
 - Multiple Cameras cooperation
 
-All these are about machine learning and technical stuff around Deeplens camera. I was thinking a lot about potential project. And I have also [some notes on possible project](project_notes.md). Unfortunately these thoughts was much much faster than actual progress on model and code. :-)
+All these are about machine learning and technical stuff around DeepLens camera. I was thinking a lot about potential project. And I have also [some notes on possible project](project_notes.md). Unfortunately these thoughts was much much faster than actual progress on model and code. :-)

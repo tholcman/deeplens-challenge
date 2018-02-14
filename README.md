@@ -9,7 +9,7 @@ I have trained `ssd_resnet50` model on custom dataset (one class) with tools fro
 - https://s3.amazonaws.com/deeplens-th-ex/bells-model5/ssd_resnet50_300-symbol.json
 - https://s3.amazonaws.com/deeplens-th-ex/bells-model5/opt/mxnet_deploy_ssd_resnet50_300_FP16_FUSED.xml
 
-Corresponding binary files might be downloaded from
+Corresponding binary files are too big so they are on S3 (I have reviewed permissions, should be public now)
 - https://s3.amazonaws.com/deeplens-th-ex/bells-model5/ssd_resnet50_300-0000.params
 - https://s3.amazonaws.com/deeplens-th-ex/bells-model5/opt/mxnet_deploy_ssd_resnet50_300_FP16_FUSED.bin
 

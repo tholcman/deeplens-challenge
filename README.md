@@ -14,7 +14,7 @@ Corresponding binary files might be downloaded from
 - https://s3.amazonaws.com/deeplens-th-ex/bells-model5/opt/mxnet_deploy_ssd_resnet50_300_FP16_FUSED.bin
 
 ## Rest of project
-As I have mentioned before I have used 2 lambdas, both managed by serverless. `count-exercise` is function to be deployed with Greengrass to DeepLens and `pass-to-es` is lambda triggered by IoT, which will pass data into Elasticsearch.
+As I have mentioned before I have used 2 lambdas, both managed by Serverless Framework. `count-exercise` is function to be deployed with Greengrass to DeepLens and `pass-to-es` is lambda triggered by IoT, which will pass data into Elasticsearch.
 
 In Terraform folder there are other AWS resources - Elasticsearch Domain and EC2 Instance as proxy.
 

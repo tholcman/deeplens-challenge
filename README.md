@@ -116,3 +116,6 @@ I will take few days rest - it was really hard to work on such project with so m
 - Multiple Cameras cooperation
 
 All these are about machine learning and technical stuff around DeepLens camera. I was thinking a lot about potential project. And I have also [some notes on possible project](project_notes.md). Unfortunately these thoughts was much much faster than actual progress on model and code. :-)
+
+### Benchmark
+[Benchmark on Deeplens](benchmark.md)

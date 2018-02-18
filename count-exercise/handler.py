@@ -22,6 +22,8 @@ import numpy
 from threading import Thread
 from recognition import NaiveRecognition
 import uuid
+from datetime import datetime
+from tzlocal import get_localzone
 
 # Creating a greengrass core sdk client
 client = greengrasssdk.client('iot-data')
@@ -33,11 +35,12 @@ my_name = os.environ['AWS_IOT_THING_NAME']
 iotTopic = '$aws/things/{}/infer'.format(my_name)
 client.publish(
     topic=iotTopic, 
-    payload = '{{"type":"{type}","payload":{{"id":"{id}","time":"{time}","msg":"Camera {name} id up."}}}}'.format(
+    payload = '{{"type":"{type}","payload":{{"id":"{id}","time":"{time}","msg":"Camera {name} id up.","datetime":"{datetime}"}}}}'.format(
         id = str(uuid.uuid4()),
         type = 'system',
         time = time.time(),
-        name = my_name
+        name = my_name,
+        datetime = datetime.now(get_localzone()).isoformat()
     )
 )
 
@@ -71,12 +74,13 @@ def send_notification(xmin, ymin, xmax, ymax):
     global client, iotTopic, my_name
     client.publish(
         topic=iotTopic, 
-        payload = '{{"type":"{event_type}","payload":{{"id":"{id}","camera":"{camera}","time":"{time}","exercise":"{exercise}"}}}}'.format(
+        payload = '{{"type":"{event_type}","payload":{{"id":"{id}","camera":"{camera}","time":"{time}","exercise":"{exercise}","datetime":"{datetime}"}}}}'.format(
             id = str(uuid.uuid4()),
             camera = my_name,
             time = time.time(),
             event_type = 'exercise',
-            exercise = 'barbell_up'
+            exercise = 'barbell_up',
+            datetime = datetime.now(get_localzone()).isoformat()
         )
     )
     
@@ -147,10 +151,11 @@ def greengrass_infinite_infer_run():
             label += '"null": 0.0'
             label += '}' 
 
-            print("FPS: ", 1.0 / (time.time() - start_time))
             cv2.putText(frame, "Count: {}".format(counter), (5, 50), cv2.FONT_HERSHEY_SIMPLEX, 2, (255, 165, 20), 6)
             global jpeg
             ret,jpeg = cv2.imencode('.jpg', frame)
+            print("FPS: ", 1.0 / (time.time() - start_time))
+            
     except Exception as e:
         print(traceback.format_exc())
         print(e)

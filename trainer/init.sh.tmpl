@@ -1,0 +1,17 @@
+#!/bin/bash -ex
+
+cd
+git clone https://github.com/apache/incubator-mxnet.git
+
+source /home/ubuntu/anaconda3/envs/python3/bin/activate
+pip3 install mxnet-cu80==0.11.1b20171009
+
+cd ~/incubator-mxnet/example/ssd/model/
+wget https://github.com/zhreshold/mxnet-ssd/releases/download/v0.2-beta/vgg16_reduced.zip
+unzip vgg16_reduced.zip
+rm vgg16_reduced.zip
+
+cd ..
+aws s3 sync ${DATASET_S3_PATH} ./data/
+
+#python3 train.py --network ${NETWORK} --data-shape ${DATASHAPE} --train-path data/train.rec --val-path data/val.rec --class-names barbell,person --num-class 2 --end-epoch 9999 >nohup.out 2>&1 &

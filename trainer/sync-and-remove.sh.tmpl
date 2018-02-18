@@ -1,0 +1,8 @@
+#!/bin/bash -ex
+
+cd /home/ubuntu/incubator-mxnet/example/ssd/
+
+ls -tp model/ssd*.params | grep -v '/$' | tail -n +6 | xargs -I {} rm -- {}
+
+/usr/local/bin/aws s3 sync ./model/ ${OUTPUT_S3_PATH}
+/usr/local/bin/aws s3 cp nohup.out ${OUTPUT_S3_PATH}

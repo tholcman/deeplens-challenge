@@ -17,16 +17,26 @@ class ThDB(object):
     setName : str
         setName train|validation
     """
-    def __init__(self, setName, data_path, shuffle):
+    def __init__(self, setName, data_path, shuffle, pascal, class_from_pascal = 14):
         self.setName = setName
         self.data_path = data_path
-        self.classes = ["barbell","phone","dog","ship","car","horse","glasses","mug","guitar","tree","duck","chair","zavora","train","snake","rat","trumpet","bicycle","cone","dolphin"]
-        self.num_classes = 20
+        self.classes = ["barbell", "person"]
+        self.num_classes = 2
         self.image_set_index = self._load_image_set_index(shuffle)
-        self.num_images = len(self.image_set_index) * 2
+        self.own_images = len(self.image_set_index)
+        self.pascal_index = []
+        self.class_from_pascal = class_from_pascal        
+        for index in range(pascal.num_images):
+            labels = pascal.label_from_index(index)
+            for obj in labels:
+                if int(obj[0]) == self.class_from_pascal and self.pascal_index.count(index) == 0:
+                    self.pascal_index.append(index)
+            # if we want just multiply of own images as count from pascal
+            #if self.own_images * 10 <= len(self.pascal_index):
+            #    break
+        self.num_images = len(self.image_set_index) + len(self.pascal_index)
         self.labels = self._load_image_labels()
-        print(self.image_set_index)
-        print(self.labels)
+        self.pascal = pascal
 
     def image_path_from_index(self, index):
         """
@@ -40,8 +50,12 @@ class ThDB(object):
         ----------
         full path of this image
         """
-        index = self._index(index)
+        if index >= self.own_images:
+            pascal_index = self.pascal_index[index - self.own_images]
+            print(self.pascal.image_path_from_index(pascal_index))
+            return self.pascal.image_path_from_index(pascal_index)
 
+        index = self._index(index)
         assert self.image_set_index is not None, "Dataset not initialized"
         name = self.image_set_index[index]
         image_file = os.path.join(self.data_path, 'Images', name + '.jpg')
@@ -60,8 +74,18 @@ class ThDB(object):
         ----------
         ground-truths of this image
         """
-        index = self._index(index)
+        if index >= self.own_images:
+            pascal_index = self.pascal_index[index - self.own_images]
+            # filter non-person & re-label
+            original_labels = self.pascal.label_from_index(pascal_index)
+            labels = []
+            for label in original_labels:
+                if int(label[0]) == self.class_from_pascal:
+                    label[0] = 1
+                    labels.append(label)
+            return np.asarray(labels)
 
+        index = self._index(index)
         assert self.labels is not None, "Labels not processed"
         return self.labels[index]
 
@@ -110,7 +134,6 @@ class ThDB(object):
     def _index(self, index):
         originalCount = len(self.image_set_index)
         base = int(index / originalCount) * originalCount
-        print('index: {index} base: {base}'.format(index = index, base = base))
         return index - base
 
 
